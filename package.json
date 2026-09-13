@@ -1,0 +1,10 @@
+{
+  "name": "@selo/sema-capabilities",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Capability-provider contracts and self-documentation for SEMA.",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "test": "tsx test/capabilities.test.ts", "typecheck": "tsc --noEmit" },
+  "devDependencies": { "tsx": "^4.19.0", "typescript": "^5.3.3" }
+}
