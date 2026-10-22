@@ -1,0 +1,57 @@
+{
+  "capabilityKey": "sema.foundation.resource.catalog",
+  "version": "1.1.0",
+  "displayName": "Discover Shared Resources",
+  "description": "Lists the published files, and the groups they were shared in, that the calling program may see. Never returns file content or fingerprints.",
+  "operations": [
+    {
+      "key": "list",
+      "required": true,
+      "description": "Every published file the caller may see, and the groups holding at least one of them.",
+      "input": { "type": "object", "additionalProperties": false, "properties": {} },
+      "output": {
+        "type": "object",
+        "required": ["resources", "groups"],
+        "properties": {
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["resourceId", "resourceVersionId", "workspaceId", "ownerId", "title", "role", "mimeType", "byteLength", "publishedAt", "source"],
+              "properties": {
+                "resourceId": { "type": "string" },
+                "resourceVersionId": { "type": "string" },
+                "workspaceId": { "type": "string" },
+                "ownerId": { "type": "string" },
+                "title": { "type": "string", "maxLength": 300 },
+                "role": { "type": "string" },
+                "mimeType": { "type": "string" },
+                "byteLength": { "type": "integer", "minimum": 0 },
+                "publishedAt": { "type": "string", "format": "date-time" },
+                "source": { "type": "object", "required": ["applicationKey"], "properties": { "applicationKey": { "type": "string" }, "assetId": { "type": "string" }, "assetVersionId": { "type": "string" } } },
+                "groupId": { "type": "string" }
+              }
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["groupId", "workspaceId", "ownerId", "title", "categories", "source", "updatedAt"],
+              "properties": {
+                "groupId": { "type": "string" },
+                "workspaceId": { "type": "string" },
+                "ownerId": { "type": "string" },
+                "title": { "type": "string", "maxLength": 300 },
+                "description": { "type": "string", "maxLength": 5000 },
+                "categories": { "type": "array", "items": { "type": "object", "required": ["categoryId", "name", "path"], "properties": { "categoryId": { "type": "string" }, "name": { "type": "string" }, "path": { "type": "array", "items": { "type": "string" } } } } },
+                "source": { "type": "object", "required": ["applicationKey"], "properties": { "applicationKey": { "type": "string" }, "artworkId": { "type": "string" } } },
+                "updatedAt": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

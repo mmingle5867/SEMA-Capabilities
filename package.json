@@ -6,8 +6,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "README.md", "docs"],
+  "files": ["dist", "definitions", "README.md", "docs"],
   "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
-  "scripts": { "build": "tsc -p tsconfig.build.json", "test": "tsx test/capabilities.test.ts", "typecheck": "tsc --noEmit", "prepack": "npm run build" },
+  "scripts": { "build": "tsc -p tsconfig.build.json", "test": "tsx test/capabilities.test.ts && tsx test/definitions.test.ts", "typecheck": "tsc --noEmit", "prepack": "npm run build" },
   "devDependencies": { "tsx": "^4.19.0", "typescript": "^5.3.3" }
 }
