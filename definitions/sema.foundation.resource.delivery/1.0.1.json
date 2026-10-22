@@ -1,0 +1,24 @@
+{
+  "capabilityKey": "sema.foundation.resource.delivery",
+  "version": "1.0.1",
+  "displayName": "Deliver Shared Resource Content",
+  "description": "Returns the content of one exact published file version, when the calling program may read it. The same behaviour as 1.0.0, now written down.",
+  "operations": [
+    {
+      "key": "read",
+      "required": true,
+      "description": "The bytes of one file version, by reference: the result names the content and its type rather than carrying it inline.",
+      "input": {
+        "type": "object",
+        "required": ["resourceId", "resourceVersionId"],
+        "additionalProperties": false,
+        "properties": { "resourceId": { "type": "string" }, "resourceVersionId": { "type": "string" } }
+      },
+      "output": {
+        "type": "object",
+        "required": ["mimeType", "byteLength", "contentRef"],
+        "properties": { "mimeType": { "type": "string" }, "byteLength": { "type": "integer", "minimum": 0 }, "contentRef": { "type": "string" } }
+      }
+    }
+  ]
+}
