@@ -1,6 +1,6 @@
 {
   "name": "@selo/sema-capabilities",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "description": "Capability-provider contracts and self-documentation for SEMA.",
   "type": "module",
@@ -8,6 +8,6 @@
   "types": "./dist/index.d.ts",
   "files": ["dist", "definitions", "README.md", "docs"],
   "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
-  "scripts": { "build": "tsc -p tsconfig.build.json", "test": "tsx test/capabilities.test.ts && tsx test/definitions.test.ts", "typecheck": "tsc --noEmit", "prepack": "npm run build" },
+  "scripts": { "build": "tsc -p tsconfig.build.json", "test": "tsx test/capabilities.test.ts && tsx test/definitions.test.ts && tsx test/listing-copy.test.ts", "typecheck": "tsc --noEmit", "prepack": "npm run build" },
   "devDependencies": { "tsx": "^4.19.0", "typescript": "^5.3.3" }
 }

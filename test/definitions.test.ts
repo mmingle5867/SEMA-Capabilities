@@ -18,6 +18,7 @@ for (const folder of readdirSync(root)) {
     const keys = definition.operations.map((operation: { key: string }) => operation.key);
     assert.equal(new Set(keys).size, keys.length, `${where}: operation keys do not repeat`);
     assert.ok(definition.operations.some((operation: { required: boolean }) => operation.required === true), `${where}: at least one required operation`);
+    if (definition.choosing !== undefined) assert.ok(Array.isArray(definition.choosing) && definition.choosing.length && definition.choosing.every((way: string) => ['bound', 'dynamic', 'consensus', 'policy'].includes(way)), `${where}: choosing lists bound, dynamic, consensus or policy`);
     for (const operation of definition.operations) {
       assert.match(operation.key, /^[a-z][a-z0-9-]*$/, `${where}: operation ${operation.key}`);
       assert.equal(typeof operation.required, 'boolean', `${where}: ${operation.key} says whether it is required`);
