@@ -1,0 +1,186 @@
+{
+  "capabilityKey": "sema.ai.generate",
+  "version": "1.0.0",
+  "displayName": "Ask an AI",
+  "description": "Asks an AI for an answer in the shape the caller gives, for any job (D-172 to D-174). The application sends its own prompt for each AI and a default, names the job, and gives the answer's shape as JSON Schema; one service per AI.",
+  "choosing": [
+    "consensus",
+    "dynamic",
+    "bound"
+  ],
+  "operations": [
+    {
+      "key": "generate",
+      "required": true,
+      "description": "Writes an answer in the requested shape with the application's prompt for this service, or its default. Core checks the answer against the shape.",
+      "job": "job",
+      "answerShape": {
+        "input": "answerShape",
+        "output": "answer"
+      },
+      "input": {
+        "type": "object",
+        "required": [
+          "job",
+          "prompts",
+          "answerShape"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "job": {
+            "type": "object",
+            "description": "The job definition this call is for; permission is checked per job",
+            "required": [
+              "key",
+              "version"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "version": {
+                "type": "string",
+                "maxLength": 40
+              }
+            }
+          },
+          "prompts": {
+            "type": "object",
+            "description": "One prompt for each service named, and a default for any other (D-169)",
+            "required": [
+              "default"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "default": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "system",
+                  "request"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "version": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "description": "The application's ID for this prompt version; the answer names it"
+                  },
+                  "system": {
+                    "type": "string",
+                    "maxLength": 20000,
+                    "description": "The instructions"
+                  },
+                  "request": {
+                    "type": "string",
+                    "maxLength": 50000,
+                    "description": "The request, already filled in"
+                  }
+                }
+              },
+              "byService": {
+                "type": "array",
+                "maxItems": 20,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "service",
+                    "version",
+                    "system",
+                    "request"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "service": {
+                      "type": "string",
+                      "maxLength": 120,
+                      "description": "The service key this prompt is for"
+                    },
+                    "version": {
+                      "type": "string",
+                      "maxLength": 200,
+                      "description": "The application's ID for this prompt version; the answer names it"
+                    },
+                    "system": {
+                      "type": "string",
+                      "maxLength": 20000,
+                      "description": "The instructions"
+                    },
+                    "request": {
+                      "type": "string",
+                      "maxLength": 50000,
+                      "description": "The request, already filled in"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "answerShape": {
+            "type": "object",
+            "description": "The answer's shape as JSON Schema, within SEMA's supported subset; its top level is an object"
+          },
+          "photos": {
+            "type": "array",
+            "maxItems": 20,
+            "description": "Photos by reference; a service that cannot read them ignores them and says so",
+            "items": {
+              "type": "object",
+              "required": [
+                "ref"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "mimeType": {
+                  "type": "string",
+                  "maxLength": 100
+                }
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "answer",
+          "promptVersion"
+        ],
+        "properties": {
+          "answer": {
+            "description": "The answer, in the requested shape"
+          },
+          "promptVersion": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Which prompt version wrote this answer"
+          },
+          "photosUsed": {
+            "type": "boolean"
+          },
+          "usage": {
+            "type": "object",
+            "description": "The AI's own usage figures, for cost",
+            "properties": {
+              "model": {
+                "type": "string"
+              },
+              "inputTokens": {
+                "type": "integer"
+              },
+              "outputTokens": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

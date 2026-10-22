@@ -1,0 +1,331 @@
+{
+  "jobKey": "listing-copy",
+  "version": "1.0",
+  "displayName": "Write listing copy",
+  "description": "Listing text for one item on one platform: titles, descriptions, tags and bullet points, following the platform's rules given as data. Formerly the capability sema.listing.write-copy (D-176). Asked of sema.ai.generate; the application fills in its prompts from the facts and runs the rule check on the answer.",
+  "facts": {
+    "type": "object",
+    "required": [
+      "item",
+      "platform"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "item": {
+        "type": "object",
+        "description": "The facts about the item. Only what is given here may be stated as fact.",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "A working title or name"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 5000,
+            "description": "Anything else the seller knows about it"
+          },
+          "brand": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "category": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "description": "The category's full path, from the top"
+          },
+          "attributes": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "value": {
+                  "type": "string",
+                  "maxLength": 500
+                }
+              }
+            }
+          },
+          "condition": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "measurements": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "value": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "unit": {
+                  "type": "string",
+                  "maxLength": 20
+                }
+              }
+            }
+          },
+          "mustSay": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "description": "Things the seller wants said"
+          }
+        }
+      },
+      "photos": {
+        "type": "array",
+        "maxItems": 20,
+        "description": "Photos by reference (for example a Foundation Resource file). A service that cannot read them ignores them and says so.",
+        "items": {
+          "type": "object",
+          "required": [
+            "ref"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "type": "string",
+              "maxLength": 2000
+            },
+            "mimeType": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        }
+      },
+      "platform": {
+        "type": "object",
+        "description": "The target platform's rules, as data.",
+        "required": [
+          "name",
+          "title",
+          "description"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "title": {
+            "type": "object",
+            "required": [
+              "maxLength"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              }
+            }
+          },
+          "description": {
+            "type": "object",
+            "required": [
+              "format",
+              "maxLength"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "format": {
+                "type": "string",
+                "enum": [
+                  "plain",
+                  "html",
+                  "markdown"
+                ]
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100000
+              }
+            }
+          },
+          "tags": {
+            "type": "object",
+            "required": [
+              "count",
+              "maxLength"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 50
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 200
+              }
+            }
+          },
+          "bullets": {
+            "type": "object",
+            "required": [
+              "count",
+              "maxLength"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 20
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              }
+            }
+          },
+          "forbiddenWords": {
+            "type": "array",
+            "maxItems": 200,
+            "items": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        }
+      },
+      "style": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tone": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "For example plain, friendly or technical"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "For example en-US"
+          },
+          "alwaysUse": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "type": "string",
+              "maxLength": 100
+            }
+          },
+          "neverUse": {
+            "type": "array",
+            "maxItems": 200,
+            "items": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        }
+      },
+      "variants": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5,
+        "description": "How many variants to write; 1 when left out"
+      }
+    }
+  },
+  "answerShape": {
+    "type": "object",
+    "required": [
+      "variants",
+      "notes"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "variants": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 5,
+        "items": {
+          "type": "object",
+          "required": [
+            "title",
+            "description",
+            "tags",
+            "bullets"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 100000
+            },
+            "tags": {
+              "type": "array",
+              "maxItems": 50,
+              "items": {
+                "type": "string",
+                "maxLength": 200
+              }
+            },
+            "bullets": {
+              "type": "array",
+              "maxItems": 20,
+              "items": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            }
+          }
+        }
+      },
+      "notes": {
+        "type": "string",
+        "maxLength": 2000,
+        "description": "Facts a buyer would want that were not given, or anything else the seller should know. Empty if nothing."
+      }
+    }
+  },
+  "checks": [
+    {
+      "key": "rule-check",
+      "code": "checkListingCopy",
+      "description": "Where a variant breaks the platform's rules: lengths, tag and bullet counts, repeated tags, markup in plain text, forbidden words. Run by the application on every variant, and again before publishing."
+    }
+  ]
+}
