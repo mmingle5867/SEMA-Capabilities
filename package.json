@@ -1,6 +1,6 @@
 {
   "name": "@selo/sema-capabilities",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Capability-provider contracts and self-documentation for SEMA.",
   "type": "module",
